@@ -1,0 +1,62 @@
+Recess Framework Model Pagination Plugin
+
+Thank you for your interest in my pagination plugin! This plugin is released
+under the MIT public license. This plugin enables you to effortlessly
+paginate ModelSets in your controllers. This plugin was based on the Plucky
+module by John Nunemaker.
+
+How to Install:
+---------------
+
+Download the Pagination Plugin and place the "PaginationPlugin/" directory
+into your Recess installation's "plugins/" directory.
+
+Update your Recess application's class file. Import the "PaginationPlugin"
+plugin. Then register the PaginationPlugin with your application. Ultimately,
+your application class file should look something like this:
+
+<?php
+Library::import('recess.framework.Application');
+Library::import('PaginationPlugin.PaginationPlugin');
+
+class MyApplication extends Application {
+  public function __construct() {
+    $this->name = 'My Cool Application';
+    $this->viewsDir = $_ENV['dir.apps'] . 'myapp/templates/';
+    $this->modelsPrefix = 'myapp.models.';
+    $this->controllersPrefix = 'myapp.controllers.';
+    $this->routingPrefix = '/';
+    $this->plugins = array(
+      new PaginationPlugin()
+    );
+  }
+}
+?>
+
+Example Model:
+--------------
+
+/**
+ * This model, when paginated, will show 5 results per page
+ * !Paginate Limit: 5
+ */
+class Book extends Model {
+
+}
+
+Example Controller:
+-------------------
+
+/**
+ * !Route GET, books
+ */
+function listBooks() {
+	$book = new Book();
+	$books = $book->equals('genre', 'adventure')->orderBy('published_at DESC')->paginate();
+	$paginator = $books->paginator;
+}
+
+Other Tips:
+-----------
+
+To request the "second page" of results, append "?page=2" to your request URL. 
